@@ -1,1 +1,6 @@
-aoeu.
+"aoeu."                             // name
+[ "src" -- "msg" -> "dest" ];       // msg
+["dest" -- "reply" -> " src" ];     // msg
+("aoeuhtanoue") {                   // alt
+  [ "src" -- "msg3" -> "dest" ]
+} { [ "dest" -- "rep3" -> "src" ] }
