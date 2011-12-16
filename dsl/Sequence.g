@@ -60,7 +60,7 @@ COMMENT
     { $channel = HIDDEN; }
   ;
 
-STRING : '"' (~'"')+ '"';
+STRING: '"' (~'"')+ '"';
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\f' )+ { $channel = HIDDEN; };
 fragment ALPHA : ('a'..'z'|'A'..'Z');

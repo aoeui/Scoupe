@@ -1,4 +1,4 @@
-// $ANTLR 3.4 /home/shahan/git/Scoupe/dsl/Sequence.g 2011-12-16 16:06:44
+// $ANTLR 3.4 /home/shahan/git/Scoupe/dsl/Sequence.g 2011-12-16 16:54:58
 
 package dsl;
 
@@ -342,12 +342,12 @@ public class SequenceLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/shahan/git/Scoupe/dsl/Sequence.g:63:8: ( '\"' (~ '\"' )+ '\"' )
-            // /home/shahan/git/Scoupe/dsl/Sequence.g:63:10: '\"' (~ '\"' )+ '\"'
+            // /home/shahan/git/Scoupe/dsl/Sequence.g:63:7: ( '\"' (~ '\"' )+ '\"' )
+            // /home/shahan/git/Scoupe/dsl/Sequence.g:63:9: '\"' (~ '\"' )+ '\"'
             {
             match('\"'); 
 
-            // /home/shahan/git/Scoupe/dsl/Sequence.g:63:14: (~ '\"' )+
+            // /home/shahan/git/Scoupe/dsl/Sequence.g:63:13: (~ '\"' )+
             int cnt2=0;
             loop2:
             do {

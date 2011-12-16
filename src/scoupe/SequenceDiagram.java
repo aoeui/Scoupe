@@ -1,9 +1,65 @@
 package scoupe;
 
 import util.Stack;
+import util.Indenter;
 
 public abstract class SequenceDiagram {
   public abstract void accept(Visitor visitor);
+  
+  public String toString() {
+    PrintVisitor visitor = new PrintVisitor();
+    accept(visitor);
+    return visitor.toString();
+  }
+  
+  public static class PrintVisitor implements Visitor {
+    Indenter indenter;
+    
+    public PrintVisitor() {
+      indenter = new Indenter(); 
+    }
+    
+    public void visitSequence(Sequence seq) {
+      for (Block b : seq.blocks) {
+        b.accept(this);
+        indenter.println();
+      }
+    }
+    public void visitMessage(Message msg) {
+      indenter.print(msg.src + " -- " + msg.name + " -> " + msg.dest);
+    }
+    public void visitAlt(Alt alt) {
+      Stack<String> guardIt = alt.guards;
+      Stack<Sequence> seqIt = alt.sequences;
+      boolean isFirst = true;
+      while (!guardIt.isEmpty()) {
+        if (isFirst) { isFirst = false; }
+        else { indenter.print("else"); }
+
+        indenter.println("if " + guardIt.head() + " then").indent();
+        seqIt.head().accept(this);
+        indenter.deindent();
+        guardIt = guardIt.tail();
+        seqIt = seqIt.tail();
+      }
+      if (alt.defaultBranch != null) {
+        indenter.println("else").indent();
+        alt.defaultBranch.accept(this);
+        indenter.deindent();
+      }
+    }
+    public void visitLoop(Loop loop) {
+      indenter.println("while " + loop.condition).indent();
+      loop.sequence.accept(this);
+      indenter.deindent();
+    }
+    public void visitRef(Ref ref) {
+      indenter.println(ref.name + " = ").indent();
+      ref.sequence.accept(this);
+      indenter.deindent();
+    }
+    public String toString() { return indenter.toString(); }
+  }
 
   public static class Sequence extends SequenceDiagram {
     public final Stack<Block> blocks;  // this stack must not be empty
