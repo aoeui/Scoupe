@@ -12,6 +12,18 @@ public abstract class SequenceDiagram {
     return visitor.toString();
   }
   
+  public static String stripQuotes(String str) {
+    if (str.charAt(0) == '"' && str.charAt(str.length()-1) == '"') {
+      return str.substring(1,str.length()-1);
+    } else return str;
+  }
+  
+  public static Stack<String> stripQuotes(Stack<String> stack) {
+    if (stack.isEmpty()) return stack;
+    
+    return stripQuotes(stack.tail()).push(stripQuotes(stack.head()));
+  }
+  
   public static class PrintVisitor implements Visitor {
     Indenter indenter;
     
@@ -80,9 +92,9 @@ public abstract class SequenceDiagram {
     public final String name;
 
     public Message(String src, String dest, String name) {
-      this.src = src;
-      this.dest = dest;
-      this.name = name;
+      this.src = stripQuotes(src);
+      this.dest = stripQuotes(dest);
+      this.name = stripQuotes(name);
     }
     
     public void accept(Visitor visitor) { visitor.visitMessage(this); }
@@ -95,7 +107,7 @@ public abstract class SequenceDiagram {
     
     public Alt(Stack<String> guards, Stack<Sequence> sequences, Sequence defaultBranch) {
       if (guards.isEmpty() || guards.size() != sequences.size()) throw new RuntimeException();
-      this.guards = guards;
+      this.guards = stripQuotes(guards);
       this.sequences = sequences;
       this.defaultBranch = defaultBranch;
     }
@@ -108,7 +120,7 @@ public abstract class SequenceDiagram {
     public final Sequence sequence;
     
     public Loop(String condition, Sequence sequence) {
-      this.condition = condition;
+      this.condition = stripQuotes(condition);
       this.sequence = sequence;
     }
     public void accept(Visitor visitor) { visitor.visitLoop(this); }
@@ -119,7 +131,7 @@ public abstract class SequenceDiagram {
     public final Sequence sequence;
     
     public Ref(String name, Sequence sequence) {
-      this.name = name;
+      this.name = stripQuotes(name);
       this.sequence = sequence;
     }
     
